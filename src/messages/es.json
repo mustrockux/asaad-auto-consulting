@@ -1,0 +1,228 @@
+{
+  "meta": {
+    "title": "Asaad Auto Consulting",
+    "description": "Consejos automotrices de confianza en tu idioma. No te dejes engañar."
+  },
+  "common": {
+    "brand": "Asaad Auto",
+    "tagline": "No te dejes engañar.",
+    "getStarted": "Comenzar",
+    "learnMore": "Saber más",
+    "back": "Atrás",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "save": "Guardar",
+    "loading": "Cargando...",
+    "free": "Gratis",
+    "perUse": "por uso",
+    "month": "mes",
+    "viewOriginal": "Ver mensaje original",
+    "viewTranslated": "Ver versión traducida",
+    "upload": "Subir",
+    "or": "o",
+    "pasteText": "Pegar texto"
+  },
+  "nav": {
+    "home": "Inicio",
+    "quoteReview": "Revisar Cotización",
+    "askAsaad": "Pregunta a Asaad",
+    "carBuying": "Comprar Auto",
+    "chat": "Chat",
+    "library": "Biblioteca",
+    "payments": "Precios",
+    "dashboard": "Panel",
+    "menu": "Menú"
+  },
+  "languagePrompt": {
+    "title": "Elige tu idioma",
+    "subtitle": "Asaad habla tu idioma. Selecciona cómo quieres usar la app.",
+    "continue": "Continuar"
+  },
+  "landing": {
+    "heroTitle": "Consejos de auto de confianza — en tu idioma",
+    "heroSubtitle": "Antes de pagar, firmar o aceptar — pregunta a Asaad. Guía honesta sobre reparaciones, concesionarios y compras de autos.",
+    "ctaAsk": "Pregunta a Asaad Ahora",
+    "ctaQuote": "Subir Cotización",
+    "trustBadge": "Confiado por conductores que no se dejan cobrar de más",
+    "featuresTitle": "Cómo Asaad te protege",
+    "feature1Title": "Revisión de Cotización",
+    "feature1Desc": "Sube una cotización de reparación. Te decimos qué es necesario, qué es venta adicional y si el precio es justo.",
+    "feature2Title": "Ayuda Instantánea",
+    "feature2Desc": "¿Atascado en un taller o concesionario? Chatea, llama o video con Asaad — en inglés, español o árabe.",
+    "feature3Title": "Guía de Compra",
+    "feature3Desc": "¿Es buen trato? Detecta señales de alerta del concesionario. Entiende el financiamiento antes de firmar.",
+    "feature4Title": "Biblioteca de Conocimiento",
+    "feature4Desc": "Guías cortas sobre estafas, mitos de reparación y trucos de concesionarios — escritas para gente real.",
+    "statsUsers": "Idiomas disponibles",
+    "statsResponse": "Tiempo de respuesta",
+    "statsSaved": "Ahorro promedio por cotización",
+    "ctaSectionTitle": "No pagues hasta preguntar a Asaad",
+    "ctaSectionDesc": "Una mala reparación o trato puede costar miles. Unos minutos con Asaad pueden ahorrarte dinero real."
+  },
+  "quote": {
+    "title": "Revisión de Cotización",
+    "subtitle": "Sube tu cotización de reparación y recibe un desglose honesto.",
+    "uploadTitle": "Sube tu Cotización",
+    "uploadDesc": "Toma una foto o sube un PDF. Lo analizamos en segundos.",
+    "dropzone": "Arrastra tu cotización aquí o toca para subir",
+    "supportedFormats": "JPG, PNG o PDF hasta 10MB",
+    "textPlaceholder": "Pega el texto de tu cotización aquí...",
+    "analyze": "Analizar mi Cotización",
+    "analyzing": "Analizando tu cotización...",
+    "resultsTitle": "Desglose de tu Cotización",
+    "necessary": "Reparaciones Necesarias",
+    "upsell": "Posibles Ventas Adicionales",
+    "fairPrice": "Rango de Precio Justo",
+    "urgency": "Urgencia",
+    "urgencyNow": "Reparar pronto — problema de seguridad",
+    "urgencySoon": "Puede esperar 2–4 semanas",
+    "urgencyLater": "No urgente — compara precios",
+    "verdict": "Veredicto de Asaad",
+    "verdictFair": "Es un trato justo.",
+    "verdictHigh": "Te están cobrando de más.",
+    "verdictLow": "Este precio parece bajo — verifica la calidad.",
+    "saveReport": "Guardar Reporte",
+    "askFollowUp": "Hacer una Pregunta de Seguimiento"
+  },
+  "ask": {
+    "title": "Pregunta a Asaad Ahora",
+    "subtitle": "Ayuda urgente cuando más la necesitas.",
+    "selectLanguage": "Idioma preferido para la respuesta",
+    "chatTitle": "Chat",
+    "chatDesc": "Escribe con Asaad ahora. Ideal para preguntas rápidas.",
+    "callTitle": "Llamada",
+    "callDesc": "Habla directamente con Asaad. Disponible en horario laboral.",
+    "videoTitle": "Video",
+    "videoDesc": "Muéstrale el problema a Asaad en vivo. Perfecto en el taller.",
+    "startChat": "Iniciar Chat",
+    "requestCall": "Solicitar Llamada",
+    "startVideo": "Iniciar Video",
+    "available": "Disponible ahora",
+    "waitTime": "Espera típica: menos de 5 min"
+  },
+  "carBuying": {
+    "title": "Asistente de Compra",
+    "subtitle": "¿Es buen trato? Descúbrelo antes de firmar.",
+    "dealChecker": "Verificador de Trato",
+    "vehiclePrice": "Precio Pedido",
+    "marketValue": "Valor de Mercado Estimado",
+    "mileage": "Kilometraje",
+    "year": "Año",
+    "make": "Marca",
+    "model": "Modelo",
+    "checkDeal": "Verificar este Trato",
+    "redFlags": "Señales de Alerta del Concesionario",
+    "redFlag1": "Presión para firmar hoy",
+    "redFlag2": "Cargos no listados al inicio",
+    "redFlag3": "Se niegan a dejarte llevar el auto a tu mecánico",
+    "redFlag4": "Términos de garantía vagos",
+    "redFlag5": "Enfoque en pago mensual en vez del precio total",
+    "financingTitle": "Financiamiento Explicado",
+    "financingDesc": "El concesionario gana dinero con el préstamo, no solo con el auto. Siempre compara su tasa con tu banco o cooperativa.",
+    "aprLabel": "TAE (Tasa Anual)",
+    "termLabel": "Plazo del Préstamo (meses)",
+    "calculate": "Calcular Pago",
+    "monthlyPayment": "Pago Mensual Estimado",
+    "totalCost": "Total que Pagarás",
+    "dealGood": "Parece un trato justo.",
+    "dealBad": "Este precio está sobre el mercado. Negocia o vete.",
+    "dealUnclear": "Necesito más info. Sube la hoja de oferta."
+  },
+  "chat": {
+    "title": "Chat con Asaad",
+    "subtitle": "Tu conversación continua",
+    "placeholder": "Escribe tu pregunta...",
+    "send": "Enviar",
+    "welcome": "¡Hola! Soy Asaad. ¿Qué pasa con tu auto?",
+    "typing": "Asaad está escribiendo...",
+    "emptyState": "Sin mensajes aún. Pregunta lo que quieras sobre reparaciones, concesionarios o compra de autos."
+  },
+  "library": {
+    "title": "Biblioteca de Conocimiento",
+    "subtitle": "Guías cortas y honestas para proteger tu bolsillo.",
+    "categories": {
+      "scams": "Estafas a Evitar",
+      "myths": "Mitos de Reparación",
+      "dealer": "Trucos de Concesionarios"
+    },
+    "readMore": "Leer más",
+    "articles": {
+      "scam1": {
+        "title": "La Trampa de la 'Inspección Gratis'",
+        "summary": "Los talleres ofrecen inspecciones gratis y encuentran $800 en reparaciones 'urgentes'. Así la detectas."
+      },
+      "scam2": {
+        "title": "Piezas OEM Falsas",
+        "summary": "Te cobran piezas originales pero ponen genéricas baratas. Pide ver el empaque."
+      },
+      "scam3": {
+        "title": "La Estafa del Líquido de Frenos",
+        "summary": "Cambios de líquido de frenos en cada visita. La mayoría de autos lo necesitan cada 3–5 años, no en cada cambio de aceite."
+      },
+      "myth1": {
+        "title": "Debes Cambiar el Aceite Cada 3,000 Millas",
+        "summary": "Los autos modernos van 5,000–10,000 millas. Revisa el manual, no la etiqueta del taller."
+      },
+      "myth2": {
+        "title": "Gasolina Premium Siempre Es Mejor",
+        "summary": "A menos que tu auto lo requiera, la premium no ayuda. Ahorra tu dinero."
+      },
+      "myth3": {
+        "title": "Calentar el Auto Antes de Manejar",
+        "summary": "Los motores modernos no necesitan calentarse mucho. 30 segundos bastan en clima frío."
+      },
+      "dealer1": {
+        "title": "El Empaque de Pagos",
+        "summary": "Los concesionarios hablan de pago mensual para esconder el precio total. Siempre negocia el precio final."
+      },
+      "dealer2": {
+        "title": "Extras en la Oficina de Financiamiento",
+        "summary": "Seguro GAP, protección de pintura, garantías extendidas — la mayoría están sobrevaloradas. Investiga antes de comprar."
+      },
+      "dealer3": {
+        "title": "Subvaluación del Trade-In",
+        "summary": "Obtén el valor de tu auto usado en CarMax o herramientas online antes de ir al lote."
+      }
+    }
+  },
+  "payments": {
+    "title": "Precios Simples y Claros",
+    "subtitle": "Sin cargos ocultos. Paga solo lo que necesitas.",
+    "payPerUse": "Pago por Uso",
+    "payPerUseDesc": "Perfecto para preguntas puntuales o una revisión de cotización.",
+    "subscription": "Suscripción",
+    "subscriptionDesc": "Acceso ilimitado para familias que quieren a Asaad siempre disponible.",
+    "quoteReview": "Revisión de Cotización",
+    "chatSession": "Sesión de Chat",
+    "videoCall": "Videollamada",
+    "unlimitedQuotes": "Revisiones de cotización ilimitadas",
+    "unlimitedChat": "Chat ilimitado",
+    "prioritySupport": "Soporte prioritario",
+    "familyPlan": "Hasta 4 miembros de familia",
+    "popular": "Más Popular",
+    "subscribe": "Suscribirse",
+    "buyNow": "Comprar Ahora",
+    "currencyNote": "Todos los precios en USD. Facturación clara en tu idioma seleccionado."
+  },
+  "dashboard": {
+    "title": "Tu Panel",
+    "subtitle": "Rastrea tus consultas y reportes guardados.",
+    "recentActivity": "Actividad Reciente",
+    "savedReports": "Reportes Guardados",
+    "noActivity": "Sin actividad aún. Sube una cotización o inicia un chat para comenzar.",
+    "quoteReviewed": "Cotización revisada",
+    "chatSession": "Sesión de chat",
+    "status": "Estado",
+    "completed": "Completado",
+    "pending": "Pendiente",
+    "viewReport": "Ver Reporte",
+    "continueChat": "Continuar Chat"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados.",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "contact": "Contacto"
+  }
+}

@@ -1,0 +1,228 @@
+{
+  "meta": {
+    "title": "Asaad Auto Consulting",
+    "description": "Trusted automotive advice in your language. Don't get taken for a ride."
+  },
+  "common": {
+    "brand": "Asaad Auto",
+    "tagline": "Don't Get Taken for a Ride.",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More",
+    "back": "Back",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "close": "Close",
+    "save": "Save",
+    "loading": "Loading...",
+    "free": "Free",
+    "perUse": "per use",
+    "month": "month",
+    "viewOriginal": "View original message",
+    "viewTranslated": "View translated version",
+    "upload": "Upload",
+    "or": "or",
+    "pasteText": "Paste text instead"
+  },
+  "nav": {
+    "home": "Home",
+    "quoteReview": "Quote Review",
+    "askAsaad": "Ask Asaad",
+    "carBuying": "Car Buying",
+    "chat": "Chat",
+    "library": "Knowledge Library",
+    "payments": "Pricing",
+    "dashboard": "Dashboard",
+    "menu": "Menu"
+  },
+  "languagePrompt": {
+    "title": "Choose Your Language",
+    "subtitle": "Asaad speaks your language. Select how you'd like to use the app.",
+    "continue": "Continue"
+  },
+  "landing": {
+    "heroTitle": "Trusted auto advice — in your language",
+    "heroSubtitle": "Before you pay, sign, or agree — ask Asaad. Get honest guidance on repairs, dealerships, and car purchases.",
+    "ctaAsk": "Ask Asaad Now",
+    "ctaQuote": "Upload Estimate",
+    "trustBadge": "Trusted by drivers who refuse to be overcharged",
+    "featuresTitle": "How Asaad Protects You",
+    "feature1Title": "Quote Review",
+    "feature1Desc": "Upload a repair estimate. We'll tell you what's necessary, what's an upsell, and if the price is fair.",
+    "feature2Title": "Instant Help",
+    "feature2Desc": "Stuck at a shop or dealership? Chat, call, or video with Asaad — in English, Spanish, or Arabic.",
+    "feature3Title": "Car Buying Guide",
+    "feature3Desc": "Is this a good deal? Spot dealer red flags. Understand financing before you sign.",
+    "feature4Title": "Knowledge Library",
+    "feature4Desc": "Short guides on scams, repair myths, and dealer tricks — written for real people.",
+    "statsUsers": "Languages supported",
+    "statsResponse": "Avg. response time",
+    "statsSaved": "Avg. savings per quote",
+    "ctaSectionTitle": "Don't pay until you ask Asaad",
+    "ctaSectionDesc": "One bad repair or dealer deal can cost thousands. A few minutes with Asaad can save you real money."
+  },
+  "quote": {
+    "title": "Quote Review",
+    "subtitle": "Upload your repair estimate and get an honest breakdown.",
+    "uploadTitle": "Upload Your Estimate",
+    "uploadDesc": "Take a photo or upload a PDF. We'll analyze it in seconds.",
+    "dropzone": "Drop your estimate here or tap to upload",
+    "supportedFormats": "JPG, PNG, or PDF up to 10MB",
+    "textPlaceholder": "Paste your estimate text here...",
+    "analyze": "Analyze My Quote",
+    "analyzing": "Analyzing your estimate...",
+    "resultsTitle": "Your Quote Breakdown",
+    "necessary": "Necessary Repairs",
+    "upsell": "Likely Upsells",
+    "fairPrice": "Fair Price Range",
+    "urgency": "Urgency",
+    "urgencyNow": "Fix soon — safety issue",
+    "urgencySoon": "Can wait 2–4 weeks",
+    "urgencyLater": "Not urgent — shop around",
+    "verdict": "Asaad's Verdict",
+    "verdictFair": "This is a fair deal.",
+    "verdictHigh": "You're being overcharged.",
+    "verdictLow": "This price seems low — verify quality.",
+    "saveReport": "Save Report",
+    "askFollowUp": "Ask a Follow-Up Question"
+  },
+  "ask": {
+    "title": "Ask Asaad Now",
+    "subtitle": "Urgent help when you need it most.",
+    "selectLanguage": "Preferred language for response",
+    "chatTitle": "Chat",
+    "chatDesc": "Text with Asaad right now. Best for quick questions.",
+    "callTitle": "Call",
+    "callDesc": "Talk directly with Asaad. Available during business hours.",
+    "videoTitle": "Video",
+    "videoDesc": "Show Asaad the problem live. Perfect at the shop.",
+    "startChat": "Start Chat",
+    "requestCall": "Request Call",
+    "startVideo": "Start Video",
+    "available": "Available now",
+    "waitTime": "Typical wait: under 5 min"
+  },
+  "carBuying": {
+    "title": "Car Buying Assistant",
+    "subtitle": "Is this a good deal? Let's find out before you sign.",
+    "dealChecker": "Deal Checker",
+    "vehiclePrice": "Asking Price",
+    "marketValue": "Estimated Market Value",
+    "mileage": "Mileage",
+    "year": "Year",
+    "make": "Make",
+    "model": "Model",
+    "checkDeal": "Check This Deal",
+    "redFlags": "Dealer Red Flags",
+    "redFlag1": "Pressure to sign today",
+    "redFlag2": "Fees not listed upfront",
+    "redFlag3": "Refusal to let you take the car to your mechanic",
+    "redFlag4": "Vague warranty terms",
+    "redFlag5": "Monthly payment focus instead of total price",
+    "financingTitle": "Financing Explained",
+    "financingDesc": "The dealer makes money on the loan, not just the car. Always compare their rate with your bank or credit union.",
+    "aprLabel": "APR (Annual Rate)",
+    "termLabel": "Loan Term (months)",
+    "calculate": "Calculate Payment",
+    "monthlyPayment": "Estimated Monthly Payment",
+    "totalCost": "Total You'll Pay",
+    "dealGood": "This looks like a fair deal.",
+    "dealBad": "This price is above market. Negotiate or walk.",
+    "dealUnclear": "Need more info. Upload the offer sheet."
+  },
+  "chat": {
+    "title": "Chat with Asaad",
+    "subtitle": "Your ongoing conversation",
+    "placeholder": "Type your question...",
+    "send": "Send",
+    "welcome": "Hi! I'm Asaad. What's going on with your car?",
+    "typing": "Asaad is typing...",
+    "emptyState": "No messages yet. Ask anything about repairs, dealers, or buying a car."
+  },
+  "library": {
+    "title": "Knowledge Library",
+    "subtitle": "Short, honest guides to protect your wallet.",
+    "categories": {
+      "scams": "Scams to Avoid",
+      "myths": "Repair Myths",
+      "dealer": "Dealer Tricks"
+    },
+    "readMore": "Read more",
+    "articles": {
+      "scam1": {
+        "title": "The 'Free Inspection' Trap",
+        "summary": "Shops offer free inspections, then find $800 in 'urgent' repairs. Here's how to spot it."
+      },
+      "scam2": {
+        "title": "Fake OEM Parts",
+        "summary": "You're charged for original parts but get cheap aftermarket. Ask to see the packaging."
+      },
+      "scam3": {
+        "title": "The Brake Fluid Scam",
+        "summary": "Brake fluid flushes are pushed every visit. Most cars need it every 3–5 years, not every oil change."
+      },
+      "myth1": {
+        "title": "You Must Change Oil Every 3,000 Miles",
+        "summary": "Modern cars often go 5,000–10,000 miles. Check your owner's manual, not the sticker."
+      },
+      "myth2": {
+        "title": "Premium Gas Is Always Better",
+        "summary": "Unless your car requires it, premium gas won't help. Save your money."
+      },
+      "myth3": {
+        "title": "Warm Up Your Car Before Driving",
+        "summary": "Modern engines don't need long warm-ups. 30 seconds is enough in cold weather."
+      },
+      "dealer1": {
+        "title": "The Payment Pack",
+        "summary": "Dealers focus on monthly payment to hide the total price. Always negotiate the out-the-door price."
+      },
+      "dealer2": {
+        "title": "Add-Ons in the Finance Office",
+        "summary": "GAP insurance, paint protection, extended warranties — most are overpriced. Research before you buy."
+      },
+      "dealer3": {
+        "title": "Trade-In Lowball",
+        "summary": "Get your trade-in value from CarMax or online tools before stepping on the lot."
+      }
+    }
+  },
+  "payments": {
+    "title": "Simple, Clear Pricing",
+    "subtitle": "No hidden fees. Pay only for what you need.",
+    "payPerUse": "Pay Per Use",
+    "payPerUseDesc": "Perfect for one-time questions or a single quote review.",
+    "subscription": "Subscription",
+    "subscriptionDesc": "Unlimited access for families who want Asaad always available.",
+    "quoteReview": "Quote Review",
+    "chatSession": "Chat Session",
+    "videoCall": "Video Call",
+    "unlimitedQuotes": "Unlimited quote reviews",
+    "unlimitedChat": "Unlimited chat",
+    "prioritySupport": "Priority support",
+    "familyPlan": "Up to 4 family members",
+    "popular": "Most Popular",
+    "subscribe": "Subscribe",
+    "buyNow": "Buy Now",
+    "currencyNote": "All prices in USD. Billed clearly in your selected language."
+  },
+  "dashboard": {
+    "title": "Your Dashboard",
+    "subtitle": "Track your consultations and saved reports.",
+    "recentActivity": "Recent Activity",
+    "savedReports": "Saved Reports",
+    "noActivity": "No activity yet. Upload an estimate or start a chat to get going.",
+    "quoteReviewed": "Quote reviewed",
+    "chatSession": "Chat session",
+    "status": "Status",
+    "completed": "Completed",
+    "pending": "Pending",
+    "viewReport": "View Report",
+    "continueChat": "Continue Chat"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "contact": "Contact"
+  }
+}
