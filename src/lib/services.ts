@@ -77,9 +77,41 @@ export function evaluateDeal(
   askingPrice: number,
   marketValue: number
 ): "good" | "bad" | "unclear" {
-  if (marketValue <= 0) return "unclear";
+  if (askingPrice <= 0 || marketValue <= 0) return "unclear";
   const ratio = askingPrice / marketValue;
   if (ratio <= 1.05) return "good";
   if (ratio >= 1.15) return "bad";
   return "unclear";
+}
+
+export type VehicleCondition = "excellent" | "good" | "fair" | "poor";
+
+export interface VehicleDetails {
+  make: string;
+  model: string;
+  year: number;
+  mileage: number;
+  condition: VehicleCondition;
+  askingPrice: number;
+}
+
+const conditionMultipliers: Record<VehicleCondition, number> = {
+  excellent: 1.1,
+  good: 1.0,
+  fair: 0.85,
+  poor: 0.7,
+};
+
+export function estimateMarketValue(
+  year: number,
+  mileage: number,
+  condition: VehicleCondition
+): number {
+  const currentYear = new Date().getFullYear();
+  const age = Math.max(0, currentYear - year);
+  let value = 28000;
+  value -= age * 1400;
+  value -= (mileage / 1000) * 75;
+  value *= conditionMultipliers[condition] ?? 1;
+  return Math.max(2500, Math.round(value));
 }
