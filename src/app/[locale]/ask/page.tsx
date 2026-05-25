@@ -4,6 +4,7 @@ import { PageContainer, PageHeader } from "@/components/PageLayout";
 import { BigButton } from "@/components/BigButton";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { MessageCircle, Phone, Video, Clock } from "lucide-react";
+import { PAY_PER_USE, formatPrice } from "@/lib/pricing";
 import { routing } from "@/i18n/routing";
 
 export function generateStaticParams() {
@@ -18,6 +19,7 @@ export default async function AskPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("ask");
+  const tCommon = await getTranslations("common");
 
   const options = [
     {
@@ -26,23 +28,26 @@ export default async function AskPage({
       desc: t("chatDesc"),
       cta: t("startChat"),
       href: "/chat",
-      primary: true,
+      price: null,
+      free: true,
     },
     {
       icon: Phone,
       title: t("callTitle"),
       desc: t("callDesc"),
       cta: t("requestCall"),
-      href: "/chat",
-      primary: false,
+      href: "/payments",
+      price: formatPrice(PAY_PER_USE.liveCall.price),
+      free: false,
     },
     {
       icon: Video,
       title: t("videoTitle"),
       desc: t("videoDesc"),
       cta: t("startVideo"),
-      href: "/chat",
-      primary: false,
+      href: "/payments",
+      price: formatPrice(PAY_PER_USE.videoConsult.price),
+      free: false,
     },
   ];
 
@@ -55,8 +60,8 @@ export default async function AskPage({
         <LanguageSelector />
       </div>
 
-      <div className="grid gap-6 sm:grid-cols-1 lg:grid-cols-3">
-        {options.map(({ icon: Icon, title, desc, cta, href, primary }) => (
+      <div className="grid gap-6 lg:grid-cols-3">
+        {options.map(({ icon: Icon, title, desc, cta, href, price, free }) => (
           <div
             key={title}
             className="flex flex-col rounded-2xl border border-border bg-charcoal p-6"
@@ -64,6 +69,14 @@ export default async function AskPage({
             <Icon className="mb-4 h-10 w-10 text-accent-red" />
             <h3 className="mb-2 text-xl font-bold">{title}</h3>
             <p className="mb-4 flex-1 text-steel-light">{desc}</p>
+            {free ? (
+              <p className="mb-4 text-lg font-bold text-success">{tCommon("free")}</p>
+            ) : (
+              <p className="mb-4">
+                <span className="text-2xl font-bold text-accent-red">{price}</span>
+                <span className="text-steel-light"> {tCommon("perUse")}</span>
+              </p>
+            )}
             <div className="mb-4 flex items-center gap-4 text-sm text-steel-light">
               <span className="flex items-center gap-1 text-success">
                 <span className="h-2 w-2 rounded-full bg-success" />
@@ -75,7 +88,7 @@ export default async function AskPage({
               </span>
             </div>
             <Link href={href}>
-              <BigButton variant={primary ? "primary" : "secondary"} className="w-full">
+              <BigButton variant={free ? "primary" : "secondary"} className="w-full">
                 {cta}
               </BigButton>
             </Link>

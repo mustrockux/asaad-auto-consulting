@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { BigButton } from "./BigButton";
 import { UpsellBanner } from "./UpsellBanner";
 import type { AIQuoteAnalysis, UrgencyLevel } from "@/lib/services";
@@ -26,6 +26,7 @@ const URGENCY_EMOJI: Record<UrgencyLevel, string> = {
 export function QuoteUpload() {
   const t = useTranslations("quote");
   const tCommon = useTranslations("common");
+  const locale = useLocale();
   const [mode, setMode] = useState<"upload" | "text">("upload");
   const [text, setText] = useState("");
   const [analyzing, setAnalyzing] = useState(false);
@@ -41,7 +42,7 @@ export function QuoteUpload() {
       const res = await fetch("/api/analyze-quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: quoteText }),
+        body: JSON.stringify({ text: quoteText, locale }),
       });
       const data = await res.json();
       setResults(data.analysis);
@@ -215,7 +216,7 @@ export function QuoteUpload() {
             <p className="text-xl font-bold">{verdictLabels[results.verdict]}</p>
           </div>
 
-          <UpsellBanner variant="quote" price="$9.99" />
+          <UpsellBanner variant="quote" />
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <BigButton variant="secondary" onClick={() => setResults(null)}>

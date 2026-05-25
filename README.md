@@ -30,6 +30,7 @@ Language selector appears on first visit and persists in the header.
 - TypeScript
 - Tailwind CSS v4
 - next-intl for i18n
+- OpenAI (`gpt-4o-mini`) for quote analysis & Mini Asaad chat
 - Lucide icons
 
 ## Getting Started
@@ -37,10 +38,30 @@ Language selector appears on first visit and persists in the header.
 ```bash
 cd ~/projects/asaad-auto-consulting
 npm install
+cp .env.example .env.local   # add your OpenAI key
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) — you'll be redirected to `/en`.
+
+### OpenAI setup
+
+1. Create a key at [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+2. Add to `.env.local`:
+   ```
+   OPENAI_API_KEY=sk-...
+   ```
+3. Restart the dev server
+
+**Without a key:** the app falls back to the built-in rules engine (still works, less smart).
+
+### Deploy on Vercel with OpenAI
+
+1. Vercel Dashboard → your project → **Settings** → **Environment Variables**
+2. Add `OPENAI_API_KEY` with your key (Production + Preview)
+3. Redeploy
+
+Responses automatically use the user's selected language (en / es / ar).
 
 ## Project Structure
 
@@ -59,9 +80,8 @@ src/
 - Mobile-first, large CTAs for stressful situations
 - RTL layout for Arabic with Noto Sans Arabic font
 
-## Next Steps (V2)
+## Next Steps
 
-- Connect real AI backend for quote analysis and chat
 - Stripe payment integration
 - Voice input in all languages
 - Regional scam alerts

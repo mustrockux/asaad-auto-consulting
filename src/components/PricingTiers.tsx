@@ -1,126 +1,101 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { PageContainer, PageHeader } from "@/components/PageLayout";
 import { BigButton } from "@/components/BigButton";
-import { PRICING_TIERS } from "@/lib/pricing";
-import { Check, Sparkles, Bot, User } from "lucide-react";
+import { PAY_PER_USE, formatPrice } from "@/lib/pricing";
+import { Check, FileSearch, Phone, Video, Sparkles } from "lucide-react";
 import clsx from "clsx";
 
 export function PricingTiers() {
   const t = useTranslations("payments");
+  const tCommon = useTranslations("common");
 
-  const tiers = [
+  const plans = [
     {
-      id: "ai" as const,
-      icon: Bot,
-      title: t("tierAi"),
-      price: PRICING_TIERS.ai.priceLabel,
-      desc: t("tierAiDesc"),
-      features: [t("aiQuoteAnalysis"), t("aiChat"), t("aiDealCheck")],
-      cta: t("startFree"),
-      variant: "secondary" as const,
-      badge: t("freeForever"),
-    },
-    {
-      id: "aiPlus" as const,
-      icon: Sparkles,
-      title: t("tierAiPlus"),
-      price: PRICING_TIERS.aiPlus.priceLabel,
-      desc: t("tierAiPlusDesc"),
-      features: [t("unlimitedAiQuotes"), t("unlimitedAiChat"), t("savedReports")],
-      cta: t("upgradeAiPlus"),
-      variant: "secondary" as const,
-    },
-    {
-      id: "human" as const,
-      icon: User,
-      title: t("tierHuman"),
-      price: PRICING_TIERS.human.priceLabel,
-      desc: t("tierHumanDesc"),
-      features: [
-        t("asaadQuoteReview"),
-        t("asaadChatSession"),
-        t("asaadVideoCall"),
-        t("prioritySupport"),
-      ],
-      cta: t("subscribe"),
-      variant: "primary" as const,
-      badge: t("popular"),
+      id: "quoteReview" as const,
+      icon: FileSearch,
+      price: PAY_PER_USE.quoteReview.price,
       highlight: true,
+      featureKeys: [
+        "quoteFeature1",
+        "quoteFeature2",
+        "quoteFeature3",
+        "quoteFeature4",
+        "quoteFeature5",
+        "quoteFeature6",
+      ],
     },
-  ];
-
-  const humanAddOns = [
-    { name: t("asaadQuoteReview"), price: "$9.99" },
-    { name: t("asaadChatSession"), price: "$14.99" },
-    { name: t("asaadVideoCall"), price: "$24.99" },
+    {
+      id: "liveCall" as const,
+      icon: Phone,
+      price: PAY_PER_USE.liveCall.price,
+      featureKeys: ["callFeature1", "callFeature2", "callFeature3", "callFeature4"],
+    },
+    {
+      id: "videoConsult" as const,
+      icon: Video,
+      price: PAY_PER_USE.videoConsult.price,
+      featureKeys: ["videoFeature1", "videoFeature2", "videoFeature3", "videoFeature4"],
+    },
   ];
 
   return (
     <PageContainer>
       <PageHeader title={t("title")} subtitle={t("subtitle")} />
 
-      <p className="mb-4 text-center text-lg font-medium text-accent-red">{t("upsellHeadline")}</p>
-      <p className="mb-10 text-center text-sm text-steel-light">{t("currencyNote")}</p>
-
-      <div className="mb-12 grid gap-6 lg:grid-cols-3">
-        {tiers.map((tier) => {
-          const Icon = tier.icon;
-          return (
-            <div
-              key={tier.id}
-              className={clsx(
-                "relative rounded-2xl border p-6 sm:p-8",
-                tier.highlight
-                  ? "border-2 border-accent-red bg-charcoal glow-red"
-                  : "border-border bg-charcoal"
-              )}
-            >
-              {tier.badge && (
-                <span
-                  className={clsx(
-                    "absolute -top-3 start-6 rounded-full px-3 py-1 text-xs font-bold",
-                    tier.highlight ? "bg-accent-red text-white" : "bg-success/20 text-success"
-                  )}
-                >
-                  {tier.badge}
-                </span>
-              )}
-              <Icon className="mb-4 h-8 w-8 text-accent-red" />
-              <h2 className="mb-1 text-xl font-bold">{tier.title}</h2>
-              <p className="mb-4 text-3xl font-bold text-accent-red">{tier.price}</p>
-              <p className="mb-6 text-sm text-steel-light">{tier.desc}</p>
-              <ul className="mb-8 space-y-3">
-                {tier.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-sm">
-                    <Check className="mt-0.5 h-4 w-4 shrink-0 text-success" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <BigButton variant={tier.variant} className="w-full">
-                {tier.cta}
-              </BigButton>
-            </div>
-          );
-        })}
+      <div className="mb-10 rounded-2xl border border-border bg-charcoal p-5 sm:p-6">
+        <div className="flex items-start gap-3">
+          <Sparkles className="mt-0.5 h-5 w-5 shrink-0 text-accent-red" />
+          <div>
+            <p className="font-semibold">{t("freeAiNote")}</p>
+            <p className="mt-1 text-sm text-steel-light">{t("freeAiNoteDesc")}</p>
+            <Link href="/quote" className="mt-3 inline-block text-sm font-medium text-accent-red hover:underline">
+              {t("tryFreeAi")} →
+            </Link>
+          </div>
+        </div>
       </div>
 
-      <div className="rounded-2xl border border-border bg-charcoal p-6 sm:p-8">
-        <h2 className="mb-2 text-xl font-bold">{t("humanAddOns")}</h2>
-        <p className="mb-6 text-steel-light">{t("humanAddOnsDesc")}</p>
-        <ul className="space-y-4">
-          {humanAddOns.map((item) => (
-            <li
-              key={item.name}
-              className="flex items-center justify-between border-b border-border pb-4 last:border-0"
-            >
-              <span>{item.name}</span>
-              <span className="text-lg font-bold text-accent-red">{item.price}</span>
-            </li>
-          ))}
-        </ul>
+      <p className="mb-8 text-center text-sm text-steel-light">{t("currencyNote")}</p>
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        {plans.map(({ id, icon: Icon, price, highlight, featureKeys }) => (
+          <div
+            key={id}
+            className={clsx(
+              "relative flex flex-col rounded-2xl border p-6 sm:p-8",
+              highlight
+                ? "border-2 border-accent-red bg-charcoal glow-red"
+                : "border-border bg-charcoal"
+            )}
+          >
+            {highlight && (
+              <span className="absolute -top-3 start-6 rounded-full bg-accent-red px-3 py-1 text-xs font-bold text-white">
+                {t("mostPopular")}
+              </span>
+            )}
+            <Icon className="mb-4 h-8 w-8 text-accent-red" />
+            <h2 className="text-xl font-bold">{t(`${id}Title`)}</h2>
+            <p className="mt-2 text-sm text-steel-light">{t(`${id}Desc`)}</p>
+            <p className="my-4">
+              <span className="text-4xl font-bold text-accent-red">{formatPrice(price)}</span>
+              <span className="text-steel-light"> {tCommon("perUse")}</span>
+            </p>
+            <ul className="mb-8 flex-1 space-y-3">
+              {featureKeys.map((key) => (
+                <li key={key} className="flex items-start gap-2 text-sm">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+                  {t(key)}
+                </li>
+              ))}
+            </ul>
+            <BigButton variant={highlight ? "primary" : "secondary"} className="w-full">
+              {t("buyNow")}
+            </BigButton>
+          </div>
+        ))}
       </div>
     </PageContainer>
   );

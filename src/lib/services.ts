@@ -10,7 +10,7 @@ export {
 
 export { getMiniAsaadResponse, type MiniAsaadResponse, type RiskLevel } from "./ai/mini-asaad";
 
-export { PRICING_TIERS, PRICING_ITEMS, UPSELL_PATHS, formatPrice } from "./pricing";
+export { PAY_PER_USE, UPSELL_PATHS, formatPrice } from "./pricing";
 
 export function calculateMonthlyPayment(
   principal: number,
