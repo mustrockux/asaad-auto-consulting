@@ -1,6 +1,8 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { PageContainer, PageHeader } from "@/components/PageLayout";
+import { CheckoutButton } from "@/components/CheckoutButton";
+import { MaskedPhoneLink } from "@/components/MaskedPhoneLink";
 import { BigButton } from "@/components/BigButton";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { MessageCircle, Phone, Video, Clock } from "lucide-react";
@@ -20,6 +22,7 @@ export default async function AskPage({
   setRequestLocale(locale);
   const t = await getTranslations("ask");
   const tCommon = await getTranslations("common");
+  const tPay = await getTranslations("payments");
 
   const options = [
     {
@@ -30,24 +33,25 @@ export default async function AskPage({
       href: "/chat",
       price: null,
       free: true,
+      product: null as null,
     },
     {
       icon: Phone,
       title: t("callTitle"),
       desc: t("callDesc"),
       cta: t("requestCall"),
-      href: "/payments",
       price: formatPrice(PAY_PER_USE.liveCall.price),
       free: false,
+      product: "liveCall" as const,
     },
     {
       icon: Video,
       title: t("videoTitle"),
       desc: t("videoDesc"),
       cta: t("startVideo"),
-      href: "/payments",
       price: formatPrice(PAY_PER_USE.videoConsult.price),
       free: false,
+      product: "videoConsult" as const,
     },
   ];
 
@@ -60,8 +64,14 @@ export default async function AskPage({
         <LanguageSelector />
       </div>
 
+      <div className="mb-8 rounded-2xl border border-accent-red/30 bg-accent-red-glow p-6 text-center">
+        <p className="mb-2 text-sm text-steel-light">{tPay("consultLineTitle")}</p>
+        <MaskedPhoneLink className="text-xl" />
+        <p className="mt-2 text-xs text-steel-light">{tPay("consultLineNote")}</p>
+      </div>
+
       <div className="grid gap-6 lg:grid-cols-3">
-        {options.map(({ icon: Icon, title, desc, cta, href, price, free }) => (
+        {options.map(({ icon: Icon, title, desc, cta, href, price, free, product }) => (
           <div
             key={title}
             className="flex flex-col rounded-2xl border border-border bg-charcoal p-6"
@@ -87,11 +97,17 @@ export default async function AskPage({
                 {t("waitTime")}
               </span>
             </div>
-            <Link href={href}>
-              <BigButton variant={free ? "primary" : "secondary"} className="w-full">
+            {free ? (
+              <Link href={href!}>
+                <BigButton variant="primary" className="w-full">
+                  {cta}
+                </BigButton>
+              </Link>
+            ) : product ? (
+              <CheckoutButton product={product} variant="secondary" className="w-full">
                 {cta}
-              </BigButton>
-            </Link>
+              </CheckoutButton>
+            ) : null}
           </div>
         ))}
       </div>

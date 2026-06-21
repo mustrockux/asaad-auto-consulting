@@ -1,13 +1,19 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Link } from "@/i18n/navigation";
-import { BigButton } from "./BigButton";
+import { CheckoutButton } from "./CheckoutButton";
 import { Sparkles, User, AlertTriangle } from "lucide-react";
 import { PAY_PER_USE, formatPrice } from "@/lib/pricing";
+import type { PayPerUseProduct } from "@/lib/pricing";
 import clsx from "clsx";
 
 type UpsellVariant = "quote" | "chat" | "highRisk";
+
+const VARIANT_PRODUCT: Record<UpsellVariant, PayPerUseProduct> = {
+  quote: "quoteReview",
+  chat: "liveCall",
+  highRisk: "videoConsult",
+};
 
 interface UpsellBannerProps {
   variant: UpsellVariant;
@@ -16,12 +22,8 @@ interface UpsellBannerProps {
 
 export function UpsellBanner({ variant, className }: UpsellBannerProps) {
   const t = useTranslations("upsell");
-
-  const prices = {
-    quote: formatPrice(PAY_PER_USE.quoteReview.price),
-    chat: formatPrice(PAY_PER_USE.liveCall.price),
-    highRisk: formatPrice(PAY_PER_USE.videoConsult.price),
-  };
+  const product = VARIANT_PRODUCT[variant];
+  const price = formatPrice(PAY_PER_USE[product].price);
 
   const config = {
     quote: {
@@ -29,27 +31,24 @@ export function UpsellBanner({ variant, className }: UpsellBannerProps) {
       title: t("quoteTitle"),
       desc: t("quoteDesc"),
       cta: t("quoteCta"),
-      href: "/payments" as const,
-      price: prices.quote,
       accent: "border-accent-red bg-accent-red-glow",
+      buttonVariant: "outline" as const,
     },
     chat: {
       icon: User,
       title: t("chatTitle"),
       desc: t("chatDesc"),
       cta: t("chatCta"),
-      href: "/payments" as const,
-      price: prices.chat,
       accent: "border-border bg-charcoal",
+      buttonVariant: "outline" as const,
     },
     highRisk: {
       icon: AlertTriangle,
       title: t("highRiskTitle"),
       desc: t("highRiskDesc"),
       cta: t("highRiskCta"),
-      href: "/payments" as const,
-      price: prices.highRisk,
       accent: "border-warning bg-warning/10",
+      buttonVariant: "primary" as const,
     },
   }[variant];
 
@@ -72,15 +71,13 @@ export function UpsellBanner({ variant, className }: UpsellBannerProps) {
             <h3 className="font-bold">{config.title}</h3>
             <p className="mt-1 text-sm text-steel-light">{config.desc}</p>
             <p className="mt-2 text-sm font-semibold text-accent-red">
-              {t("oneTimePrice", { price: config.price })}
+              {t("oneTimePrice", { price })}
             </p>
           </div>
         </div>
-        <Link href={config.href} className="shrink-0">
-          <BigButton size="md" variant={variant === "highRisk" ? "primary" : "outline"}>
-            {config.cta}
-          </BigButton>
-        </Link>
+        <CheckoutButton product={product} variant={config.buttonVariant} className="shrink-0 sm:min-w-[180px]">
+          {config.cta}
+        </CheckoutButton>
       </div>
     </div>
   );

@@ -3,14 +3,17 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { PageContainer, PageHeader } from "@/components/PageLayout";
-import { BigButton } from "@/components/BigButton";
+import { CheckoutButton } from "@/components/CheckoutButton";
+import { MaskedPhoneLink } from "@/components/MaskedPhoneLink";
 import { PAY_PER_USE, formatPrice } from "@/lib/pricing";
+import { isCheckoutConfigured } from "@/lib/checkout";
 import { Check, FileSearch, Phone, Video, Sparkles } from "lucide-react";
 import clsx from "clsx";
 
 export function PricingTiers() {
   const t = useTranslations("payments");
   const tCommon = useTranslations("common");
+  const checkoutLive = isCheckoutConfigured();
 
   const plans = [
     {
@@ -58,6 +61,12 @@ export function PricingTiers() {
         </div>
       </div>
 
+      {!checkoutLive && (
+        <p className="mb-6 rounded-xl border border-warning/30 bg-warning/10 px-4 py-3 text-center text-sm text-warning">
+          {t("stripeSetupHint")}
+        </p>
+      )}
+
       <p className="mb-8 text-center text-sm text-steel-light">{t("currencyNote")}</p>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -91,11 +100,19 @@ export function PricingTiers() {
                 </li>
               ))}
             </ul>
-            <BigButton variant={highlight ? "primary" : "secondary"} className="w-full">
+            <CheckoutButton product={id} variant={highlight ? "primary" : "secondary"}>
               {t("buyNow")}
-            </BigButton>
+            </CheckoutButton>
           </div>
         ))}
+      </div>
+
+      <div className="mt-12 rounded-2xl border border-border bg-charcoal p-6 text-center sm:p-8">
+        <Phone className="mx-auto mb-3 h-8 w-8 text-accent-red" />
+        <h2 className="mb-2 text-lg font-bold">{t("consultLineTitle")}</h2>
+        <p className="mb-4 text-sm text-steel-light">{t("consultLineDesc")}</p>
+        <MaskedPhoneLink className="text-2xl" />
+        <p className="mt-3 text-xs text-steel-light">{t("consultLineNote")}</p>
       </div>
     </PageContainer>
   );
