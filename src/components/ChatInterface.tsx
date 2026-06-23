@@ -3,7 +3,10 @@
 import { useState, useRef, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Send, Sparkles, Bot } from "lucide-react";
+import { PaywallBanner } from "./PaywallBanner";
 import { UpsellBanner } from "./UpsellBanner";
+import { useEntitlements } from "@/hooks/useEntitlements";
+import { recordChatMessage, canSendChatMessage } from "@/lib/entitlements";
 import clsx from "clsx";
 
 interface Message {
@@ -16,19 +19,31 @@ interface Message {
 
 export function ChatInterface() {
   const t = useTranslations("chat");
+  const tPaywall = useTranslations("paywall");
   const locale = useLocale();
+  const { hasAiPlus, chatRemaining, refresh } = useEntitlements();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
   const [showEscalation, setShowEscalation] = useState(false);
+  const [chatBlocked, setChatBlocked] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, typing, showEscalation]);
+  }, [messages, typing, showEscalation, chatBlocked]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
+
+    if (!hasAiPlus) {
+      const { allowed } = canSendChatMessage();
+      if (!allowed) {
+        setChatBlocked(true);
+        return;
+      }
+    }
+
     const userMsg: Message = {
       id: Date.now().toString(),
       role: "user",
@@ -38,6 +53,10 @@ export function ChatInterface() {
     setInput("");
     setTyping(true);
     setShowEscalation(false);
+    setChatBlocked(false);
+
+    if (!hasAiPlus) recordChatMessage();
+    refresh();
 
     try {
       const res = await fetch("/api/chat", {
@@ -82,9 +101,18 @@ export function ChatInterface() {
         </div>
         <span className="ms-auto flex items-center gap-1 rounded-full bg-success/20 px-2 py-1 text-xs font-bold text-success">
           <Sparkles className="h-3 w-3" />
-          {t("aiFree")}
+          {hasAiPlus ? "AI Plus" : t("aiFree")}
         </span>
       </div>
+
+      {!hasAiPlus && (
+        <p className="text-center text-xs text-steel-light">
+          {tPaywall("chatRemaining", {
+            session: chatRemaining.session === Infinity ? "∞" : chatRemaining.session,
+            daily: chatRemaining.daily === Infinity ? "∞" : chatRemaining.daily,
+          })}
+        </p>
+      )}
 
       <div className="flex h-[calc(100vh-16rem)] flex-col rounded-2xl border border-border bg-charcoal sm:h-[560px]">
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
@@ -142,32 +170,40 @@ export function ChatInterface() {
         </div>
 
         <div className="border-t border-border p-4">
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              placeholder={t("placeholder")}
-              className="flex-1 rounded-xl border border-border bg-background px-4 py-3 focus:border-accent-red focus:outline-none"
-            />
-            <button
-              onClick={sendMessage}
-              disabled={!input.trim() || typing}
-              className="rounded-xl bg-accent-red px-4 py-3 text-white transition-colors hover:bg-accent-red-dark disabled:opacity-50"
-              aria-label={t("send")}
-            >
-              <Send className="h-5 w-5" />
-            </button>
-          </div>
+          {chatBlocked ? (
+            <PaywallBanner variant="chat" />
+          ) : (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+                placeholder={t("placeholder")}
+                className="flex-1 rounded-xl border border-border bg-background px-4 py-3 focus:border-accent-red focus:outline-none"
+              />
+              <button
+                onClick={sendMessage}
+                disabled={!input.trim() || typing}
+                className="rounded-xl bg-accent-red px-4 py-3 text-white transition-colors hover:bg-accent-red-dark disabled:opacity-50"
+                aria-label={t("send")}
+              >
+                <Send className="h-5 w-5" />
+              </button>
+            </div>
+          )}
         </div>
       </div>
+
+      {showEscalation && !hasAiPlus && (
+        <PaywallBanner variant="highRisk" showHumanUpsell={false} />
+      )}
 
       {showEscalation && (
         <UpsellBanner variant="highRisk" />
       )}
 
-      {!showEscalation && messages.length >= 2 && (
+      {!showEscalation && !chatBlocked && messages.length >= 2 && !hasAiPlus && (
         <UpsellBanner variant="chat" />
       )}
     </div>

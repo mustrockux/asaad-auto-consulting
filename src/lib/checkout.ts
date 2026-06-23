@@ -1,14 +1,11 @@
 import type { PayPerUseProduct } from "./pricing";
 
 /**
- * Stripe Payment Links — no monthly fee, pay only per successful charge.
- * Create links at: Stripe Dashboard → Product catalog → Payment links
- *
- * Set success URL in each link to:
- * https://YOUR_DOMAIN/{locale}/payments/success?product=quoteReview
- * (use en, es, or ar — or one link per locale)
+ * Stripe Payment Links — fallback when STRIPE_SECRET_KEY is not set.
+ * Create at: Stripe Dashboard → Product catalog → Payment links
  */
 const CHECKOUT_ENV_KEYS: Record<PayPerUseProduct, string> = {
+  aiPlus: "NEXT_PUBLIC_STRIPE_LINK_AI_PLUS",
   quoteReview: "NEXT_PUBLIC_STRIPE_LINK_QUOTE_REVIEW",
   liveCall: "NEXT_PUBLIC_STRIPE_LINK_LIVE_CALL",
   videoConsult: "NEXT_PUBLIC_STRIPE_LINK_VIDEO_CONSULT",
@@ -20,15 +17,28 @@ export function getCheckoutUrl(product: PayPerUseProduct): string | null {
   return url && url.startsWith("https://") ? url : null;
 }
 
-export function isCheckoutConfigured(product?: PayPerUseProduct): boolean {
+export function isPaymentLinkConfigured(product?: PayPerUseProduct): boolean {
   if (product) return getCheckoutUrl(product) !== null;
-  return (["quoteReview", "liveCall", "videoConsult"] as PayPerUseProduct[]).some(
+  return (Object.keys(CHECKOUT_ENV_KEYS) as PayPerUseProduct[]).some(
     (p) => getCheckoutUrl(p) !== null
   );
 }
 
+/** True when Payment Links or Stripe Checkout API is available */
+export function isCheckoutConfigured(product?: PayPerUseProduct): boolean {
+  const apiFlag = process.env.NEXT_PUBLIC_STRIPE_CHECKOUT === "true";
+  const apiReady =
+    typeof window === "undefined"
+      ? !!process.env.STRIPE_SECRET_KEY
+      : apiFlag;
+
+  if (product) return apiReady || getCheckoutUrl(product) !== null;
+  return apiReady || isPaymentLinkConfigured();
+}
+
 export function getConfiguredProducts(): PayPerUseProduct[] {
-  return (["quoteReview", "liveCall", "videoConsult"] as PayPerUseProduct[]).filter(
-    (p) => getCheckoutUrl(p) !== null
-  );
+  const apiReady = !!process.env.STRIPE_SECRET_KEY;
+  const products = Object.keys(CHECKOUT_ENV_KEYS) as PayPerUseProduct[];
+  if (apiReady) return products;
+  return products.filter((p) => getCheckoutUrl(p) !== null);
 }

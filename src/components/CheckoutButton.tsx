@@ -1,9 +1,10 @@
 "use client";
 
+import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import type { PayPerUseProduct } from "@/lib/pricing";
 import { getCheckoutUrl } from "@/lib/checkout";
 import { BigButton } from "./BigButton";
-import { useTranslations } from "next-intl";
 import clsx from "clsx";
 
 interface CheckoutButtonProps {
@@ -20,26 +21,54 @@ export function CheckoutButton({
   children,
 }: CheckoutButtonProps) {
   const t = useTranslations("payments");
-  const checkoutUrl = getCheckoutUrl(product);
+  const locale = useLocale();
+  const [loading, setLoading] = useState(false);
+  const paymentLink = getCheckoutUrl(product);
 
-  if (checkoutUrl) {
-    return (
-      <a href={checkoutUrl} target="_blank" rel="noopener noreferrer" className={clsx("block", className)}>
-        <BigButton variant={variant} className="w-full">
-          {children}
-        </BigButton>
-      </a>
-    );
-  }
+  const handleCheckout = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ product, locale }),
+      });
+
+      if (res.ok) {
+        const data = (await res.json()) as { url?: string };
+        if (data.url) {
+          window.location.href = data.url;
+          return;
+        }
+      }
+
+      if (paymentLink) {
+        window.location.href = paymentLink;
+        return;
+      }
+
+      alert(t("checkoutNotConfigured"));
+    } catch {
+      if (paymentLink) {
+        window.location.href = paymentLink;
+      } else {
+        alert(t("checkoutNotConfigured"));
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const configured = !!paymentLink;
 
   return (
     <BigButton
-      variant="secondary"
-      className={clsx("w-full opacity-75", className)}
-      disabled
-      title={t("checkoutNotConfigured")}
+      variant={variant}
+      className={clsx("w-full", className)}
+      disabled={loading}
+      onClick={handleCheckout}
     >
-      {children}
+      {loading ? t("checkoutLoading") : children}
     </BigButton>
   );
 }

@@ -1,6 +1,7 @@
 import { setRequestLocale } from "next-intl/server";
 import { PaymentSuccess } from "@/components/PaymentSuccess";
 import { routing } from "@/i18n/routing";
+import type { PayPerUseProduct } from "@/lib/pricing";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -11,16 +12,21 @@ export default async function PaymentSuccessPage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ product?: string }>;
+  searchParams: Promise<{ product?: string; session_id?: string }>;
 }) {
   const { locale } = await params;
-  const { product } = await searchParams;
+  const { product, session_id: sessionId } = await searchParams;
   setRequestLocale(locale);
 
-  const validProducts = ["quoteReview", "liveCall", "videoConsult"] as const;
-  const resolved = validProducts.includes(product as (typeof validProducts)[number])
-    ? (product as (typeof validProducts)[number])
+  const validProducts: PayPerUseProduct[] = [
+    "aiPlus",
+    "quoteReview",
+    "liveCall",
+    "videoConsult",
+  ];
+  const resolved = validProducts.includes(product as PayPerUseProduct)
+    ? (product as PayPerUseProduct)
     : null;
 
-  return <PaymentSuccess product={resolved} />;
+  return <PaymentSuccess product={resolved} sessionId={sessionId ?? null} />;
 }

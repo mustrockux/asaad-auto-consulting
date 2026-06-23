@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { BigButton } from "./BigButton";
+import { PaywallBanner } from "./PaywallBanner";
+import { useEntitlements } from "@/hooks/useEntitlements";
 import {
   calculateMonthlyPayment,
   estimateMarketValue,
@@ -16,6 +18,8 @@ const conditions: VehicleCondition[] = ["excellent", "good", "fair", "poor"];
 
 export function CarBuyingAssistant() {
   const t = useTranslations("carBuying");
+  const tPaywall = useTranslations("paywall");
+  const { hasAiPlus } = useEntitlements();
   const [make, setMake] = useState("");
   const [model, setModel] = useState("");
   const [year, setYear] = useState("");
@@ -139,14 +143,38 @@ export function CarBuyingAssistant() {
           <AlertTriangle className="h-5 w-5 text-warning" />
           <h2 className="text-xl font-bold">{t("redFlags")}</h2>
         </div>
-        <ul className="space-y-3">
-          {redFlags.map((key) => (
-            <li key={key} className="flex items-start gap-3 text-steel-light">
-              <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-accent-red" />
-              {t(key)}
-            </li>
-          ))}
-        </ul>
+
+        <div className={clsx("relative", !hasAiPlus && "min-h-[200px]")}>
+          <ul
+            className={clsx(
+              "space-y-3",
+              !hasAiPlus && "pointer-events-none select-none blur-sm"
+            )}
+          >
+            {redFlags.map((key) => (
+              <li key={key} className="flex items-start gap-3 text-steel-light">
+                <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-accent-red" />
+                {t(key)}
+              </li>
+            ))}
+          </ul>
+          {!hasAiPlus && (
+            <div className="mt-4">
+              <PaywallBanner variant="carBuying" showHumanUpsell={false} />
+            </div>
+          )}
+        </div>
+
+        {hasAiPlus && dealResult === "bad" && (
+          <div className="mt-6 rounded-xl border border-border bg-background p-4">
+            <h3 className="mb-2 font-semibold">{tPaywall("negotiationTitle")}</h3>
+            <ul className="space-y-2 text-sm text-steel-light">
+              <li>{tPaywall("carNegotiation1")}</li>
+              <li>{tPaywall("carNegotiation2")}</li>
+              <li>{tPaywall("carNegotiation3")}</li>
+            </ul>
+          </div>
+        )}
       </section>
 
       <section className="rounded-2xl border border-border bg-charcoal p-6 sm:p-8">

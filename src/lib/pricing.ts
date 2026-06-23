@@ -1,4 +1,8 @@
-export type PayPerUseProduct = "quoteReview" | "liveCall" | "videoConsult";
+export type PayPerUseProduct =
+  | "aiPlus"
+  | "quoteReview"
+  | "liveCall"
+  | "videoConsult";
 
 export interface PayPerUsePlan {
   id: PayPerUseProduct;
@@ -8,10 +12,15 @@ export interface PayPerUsePlan {
 }
 
 export const PAY_PER_USE: Record<PayPerUseProduct, PayPerUsePlan> = {
+  aiPlus: {
+    id: "aiPlus",
+    price: 7.99,
+    duration: "24h",
+    highlight: true,
+  },
   quoteReview: {
     id: "quoteReview",
     price: 29.99,
-    highlight: true,
   },
   liveCall: {
     id: "liveCall",
@@ -24,13 +33,25 @@ export const PAY_PER_USE: Record<PayPerUseProduct, PayPerUsePlan> = {
 };
 
 export const UPSELL_PATHS = {
+  quoteToAiPlus: {
+    product: "aiPlus" as const,
+    price: PAY_PER_USE.aiPlus.price,
+  },
   quoteToComprehensiveReview: {
     product: "quoteReview" as const,
     price: PAY_PER_USE.quoteReview.price,
   },
+  chatToAiPlus: {
+    product: "aiPlus" as const,
+    price: PAY_PER_USE.aiPlus.price,
+  },
   chatToLiveCall: {
     product: "liveCall" as const,
     price: PAY_PER_USE.liveCall.price,
+  },
+  highRiskToAiPlus: {
+    product: "aiPlus" as const,
+    price: PAY_PER_USE.aiPlus.price,
   },
   highRiskToVideo: {
     product: "videoConsult" as const,

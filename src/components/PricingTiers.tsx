@@ -15,12 +15,26 @@ export function PricingTiers() {
   const tCommon = useTranslations("common");
   const checkoutLive = isCheckoutConfigured();
 
+  const aiPlusPlan = {
+    id: "aiPlus" as const,
+    icon: Sparkles,
+    price: PAY_PER_USE.aiPlus.price,
+    highlight: true,
+    featureKeys: [
+      "aiPlusFeature1",
+      "aiPlusFeature2",
+      "aiPlusFeature3",
+      "aiPlusFeature4",
+      "aiPlusFeature5",
+    ],
+  };
+
   const plans = [
     {
       id: "quoteReview" as const,
       icon: FileSearch,
       price: PAY_PER_USE.quoteReview.price,
-      highlight: true,
+      highlight: false,
       featureKeys: [
         "quoteFeature1",
         "quoteFeature2",
@@ -34,15 +48,19 @@ export function PricingTiers() {
       id: "liveCall" as const,
       icon: Phone,
       price: PAY_PER_USE.liveCall.price,
+      highlight: false,
       featureKeys: ["callFeature1", "callFeature2", "callFeature3", "callFeature4"],
     },
     {
       id: "videoConsult" as const,
       icon: Video,
       price: PAY_PER_USE.videoConsult.price,
+      highlight: false,
       featureKeys: ["videoFeature1", "videoFeature2", "videoFeature3", "videoFeature4"],
     },
   ];
+
+  const AiPlusIcon = aiPlusPlan.icon;
 
   return (
     <PageContainer>
@@ -67,6 +85,42 @@ export function PricingTiers() {
         </p>
       )}
 
+      <p className="mb-4 text-center text-sm font-semibold text-accent-red">{t("aiPlusSection")}</p>
+
+      <div className="mb-10">
+        <div
+          className={clsx(
+            "relative flex flex-col rounded-2xl border p-6 sm:p-8",
+            "border-2 border-accent-red bg-charcoal glow-red"
+          )}
+        >
+          <span className="absolute -top-3 start-6 rounded-full bg-accent-red px-3 py-1 text-xs font-bold text-white">
+            {t("aiPlusBadge")}
+          </span>
+          <AiPlusIcon className="mb-4 h-8 w-8 text-accent-red" />
+          <h2 className="text-xl font-bold">{t("aiPlusTitle")}</h2>
+          <p className="mt-2 text-sm text-steel-light">{t("aiPlusDesc")}</p>
+          <p className="my-4">
+            <span className="text-4xl font-bold text-accent-red">
+              {formatPrice(aiPlusPlan.price)}
+            </span>
+            <span className="text-steel-light"> {t("aiPlusDuration")}</span>
+          </p>
+          <ul className="mb-8 flex-1 space-y-3">
+            {aiPlusPlan.featureKeys.map((key) => (
+              <li key={key} className="flex items-start gap-2 text-sm">
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-success" />
+                {t(key)}
+              </li>
+            ))}
+          </ul>
+          <CheckoutButton product="aiPlus" variant="primary">
+            {t("aiPlusCta")}
+          </CheckoutButton>
+        </div>
+      </div>
+
+      <p className="mb-8 text-center text-sm text-steel-light">{t("humanServicesSection")}</p>
       <p className="mb-8 text-center text-sm text-steel-light">{t("currencyNote")}</p>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -80,11 +134,6 @@ export function PricingTiers() {
                 : "border-border bg-charcoal"
             )}
           >
-            {highlight && (
-              <span className="absolute -top-3 start-6 rounded-full bg-accent-red px-3 py-1 text-xs font-bold text-white">
-                {t("mostPopular")}
-              </span>
-            )}
             <Icon className="mb-4 h-8 w-8 text-accent-red" />
             <h2 className="text-xl font-bold">{t(`${id}Title`)}</h2>
             <p className="mt-2 text-sm text-steel-light">{t(`${id}Desc`)}</p>
@@ -100,7 +149,7 @@ export function PricingTiers() {
                 </li>
               ))}
             </ul>
-            <CheckoutButton product={id} variant={highlight ? "primary" : "secondary"}>
+            <CheckoutButton product={id} variant="secondary">
               {t("buyNow")}
             </CheckoutButton>
           </div>

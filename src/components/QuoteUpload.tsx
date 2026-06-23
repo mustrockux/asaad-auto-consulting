@@ -3,7 +3,12 @@
 import { useState, useRef } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { BigButton } from "./BigButton";
+import { PaywallBanner } from "./PaywallBanner";
 import { UpsellBanner } from "./UpsellBanner";
+import { useEntitlements } from "@/hooks/useEntitlements";
+import { recordQuoteAnalysis, canAnalyzeQuote } from "@/lib/entitlements";
+import { FREE_TIER_LIMITS } from "@/lib/free-tier";
+import { getFlaggedItemNames, getNegotiationTips } from "@/lib/quote-utils";
 import type { AIQuoteAnalysis, UrgencyLevel } from "@/lib/services";
 import {
   Upload,
@@ -13,6 +18,7 @@ import {
   DollarSign,
   Sparkles,
   XCircle,
+  Lock,
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import clsx from "clsx";
@@ -25,15 +31,24 @@ const URGENCY_EMOJI: Record<UrgencyLevel, string> = {
 
 export function QuoteUpload() {
   const t = useTranslations("quote");
+  const tPaywall = useTranslations("paywall");
   const tCommon = useTranslations("common");
   const locale = useLocale();
+  const { hasAiPlus, refresh } = useEntitlements();
   const [mode, setMode] = useState<"upload" | "text">("upload");
   const [text, setText] = useState("");
   const [analyzing, setAnalyzing] = useState(false);
   const [results, setResults] = useState<AIQuoteAnalysis | null>(null);
+  const [limitBlocked, setLimitBlocked] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleAnalyze = async () => {
+    if (!canAnalyzeQuote().allowed) {
+      setLimitBlocked(true);
+      return;
+    }
+
+    setLimitBlocked(false);
     const quoteText =
       text ||
       "Brake pad replacement $320, Oil change $65, Coolant flush $149, Fuel injection cleaning $189. Total: $723";
@@ -46,6 +61,8 @@ export function QuoteUpload() {
       });
       const data = await res.json();
       setResults(data.analysis);
+      if (!hasAiPlus) recordQuoteAnalysis();
+      refresh();
     } catch {
       setResults(null);
     } finally {
@@ -65,9 +82,13 @@ export function QuoteUpload() {
     low: t("verdictLow"),
   };
 
+  const showFullDetails = hasAiPlus;
+  const flaggedPreview = results ? getFlaggedItemNames(results, FREE_TIER_LIMITS.flaggedItemsPreview) : [];
+  const negotiationTips = results ? getNegotiationTips(results) : [];
+
   return (
     <div className="space-y-8">
-      {!results && (
+      {!results && !limitBlocked && (
         <div className="rounded-2xl border border-border bg-charcoal p-6 sm:p-8">
           <div className="mb-4 flex w-fit items-center gap-2 rounded-lg bg-accent-red-glow px-3 py-2">
             <Sparkles className="h-4 w-4 text-accent-red" />
@@ -78,6 +99,7 @@ export function QuoteUpload() {
           </div>
           <h2 className="mb-2 text-xl font-bold">{t("uploadTitle")}</h2>
           <p className="mb-6 text-steel-light">{t("uploadDesc")}</p>
+          <p className="mb-4 text-xs text-steel-light">{tPaywall("quoteFreeLimit")}</p>
 
           {mode === "upload" ? (
             <button
@@ -122,11 +144,26 @@ export function QuoteUpload() {
         </div>
       )}
 
+      {limitBlocked && (
+        <div className="space-y-4">
+          <p className="text-center text-steel-light">{tPaywall("quoteWeeklyLimit")}</p>
+          <PaywallBanner variant="quote" />
+          <BigButton variant="secondary" onClick={() => setLimitBlocked(false)} className="w-full">
+            {tCommon("back")}
+          </BigButton>
+        </div>
+      )}
+
       {results && (
         <div className="space-y-6">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Sparkles className="h-5 w-5 text-accent-red" />
             <h2 className="text-2xl font-bold">{t("aiResultsTitle")}</h2>
+            {hasAiPlus && (
+              <span className="rounded-full bg-accent-red/20 px-2 py-0.5 text-xs font-bold text-accent-red">
+                AI Plus
+              </span>
+            )}
           </div>
 
           <div className="rounded-2xl border border-accent-red/30 bg-accent-red-glow p-5">
@@ -159,48 +196,26 @@ export function QuoteUpload() {
             </div>
           </div>
 
-          {results.lineItems.length > 0 && (
-            <div className="space-y-3">
-              <h3 className="font-semibold">{t("lineItems")}</h3>
-              {results.lineItems.map((item) => (
-                <LineItemRow key={item.name} item={item} fairRangeLabel={t("fairRange")} />
-              ))}
+          {!showFullDetails && flaggedPreview.length > 0 && (
+            <div className="rounded-2xl border border-warning/30 bg-warning/5 p-5">
+              <p className="mb-2 text-sm font-medium text-warning">{tPaywall("flaggedPreviewTitle")}</p>
+              <ul className="space-y-1">
+                {flaggedPreview.map((name) => (
+                  <li key={name} className="flex items-center gap-2 text-sm">
+                    <Lock className="h-3.5 w-3.5 text-warning" />
+                    {name}
+                  </li>
+                ))}
+              </ul>
+              {(results.upsell.length + results.suspicious.length) > flaggedPreview.length && (
+                <p className="mt-2 text-xs text-steel-light">
+                  {tPaywall("moreItemsLocked", {
+                    count: results.upsell.length + results.suspicious.length - flaggedPreview.length,
+                  })}
+                </p>
+              )}
             </div>
           )}
-
-          <div className="grid gap-4 sm:grid-cols-3">
-            <ResultCard
-              icon={<CheckCircle className="h-5 w-5 text-success" />}
-              title={t("necessary")}
-              items={results.necessary}
-              variant="success"
-            />
-            <ResultCard
-              icon={<AlertTriangle className="h-5 w-5 text-warning" />}
-              title={t("upsell")}
-              items={results.upsell}
-              variant="warning"
-            />
-            <ResultCard
-              icon={<XCircle className="h-5 w-5 text-danger" />}
-              title={t("suspicious")}
-              items={results.suspicious}
-              variant="danger"
-            />
-          </div>
-
-          <div className="rounded-2xl border border-border bg-charcoal p-6">
-            <div className="mb-4 flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-accent-red" />
-              <h3 className="font-semibold">{t("fairPrice")}</h3>
-            </div>
-            <p className="text-2xl font-bold text-accent-red">
-              ${results.fairPriceMin.toLocaleString()} – ${results.fairPriceMax.toLocaleString()}
-            </p>
-            <p className="mt-1 text-sm text-steel-light">
-              {t("quoted")}: ${results.totalQuoted.toLocaleString()}
-            </p>
-          </div>
 
           <div
             className={clsx(
@@ -216,7 +231,79 @@ export function QuoteUpload() {
             <p className="text-xl font-bold">{verdictLabels[results.verdict]}</p>
           </div>
 
-          <UpsellBanner variant="quote" />
+          <div className="rounded-2xl border border-border bg-charcoal p-6">
+            <div className="mb-4 flex items-center gap-2">
+              <DollarSign className="h-5 w-5 text-accent-red" />
+              <h3 className="font-semibold">{t("fairPrice")}</h3>
+            </div>
+            <p className="text-2xl font-bold text-accent-red">
+              ${results.fairPriceMin.toLocaleString()} – ${results.fairPriceMax.toLocaleString()}
+            </p>
+            <p className="mt-1 text-sm text-steel-light">
+              {t("quoted")}: ${results.totalQuoted.toLocaleString()}
+            </p>
+          </div>
+
+          <div className="relative">
+            <div
+              className={clsx(
+                "space-y-6",
+                !showFullDetails && "pointer-events-none select-none blur-sm"
+              )}
+            >
+              {results.lineItems.length > 0 && (
+                <div className="space-y-3">
+                  <h3 className="font-semibold">{t("lineItems")}</h3>
+                  {results.lineItems.map((item) => (
+                    <LineItemRow key={item.name} item={item} fairRangeLabel={t("fairRange")} />
+                  ))}
+                </div>
+              )}
+
+              <div className="grid gap-4 sm:grid-cols-3">
+                <ResultCard
+                  icon={<CheckCircle className="h-5 w-5 text-success" />}
+                  title={t("necessary")}
+                  items={results.necessary}
+                  variant="success"
+                />
+                <ResultCard
+                  icon={<AlertTriangle className="h-5 w-5 text-warning" />}
+                  title={t("upsell")}
+                  items={results.upsell}
+                  variant="warning"
+                />
+                <ResultCard
+                  icon={<XCircle className="h-5 w-5 text-danger" />}
+                  title={t("suspicious")}
+                  items={results.suspicious}
+                  variant="danger"
+                />
+              </div>
+
+              {negotiationTips.length > 0 && (
+                <div className="rounded-2xl border border-border bg-charcoal p-6">
+                  <h3 className="mb-3 font-semibold">{tPaywall("negotiationTitle")}</h3>
+                  <ul className="space-y-2">
+                    {negotiationTips.map((tip) => (
+                      <li key={tip} className="flex items-start gap-2 text-sm text-steel-light">
+                        <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-accent-red" />
+                        {tip}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            {!showFullDetails && (
+              <div className="mt-4">
+                <PaywallBanner variant="quote" />
+              </div>
+            )}
+          </div>
+
+          {showFullDetails && <UpsellBanner variant="quote" />}
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <BigButton variant="secondary" onClick={() => setResults(null)}>
